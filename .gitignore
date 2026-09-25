@@ -1,0 +1,6 @@
+.DS_Store
+# Output from running the exercises
+.log
+*.log
+log.txt
+log/
