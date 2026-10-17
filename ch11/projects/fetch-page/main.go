@@ -20,23 +20,23 @@ const userAgent = "automate-the-boring-stuff-with-go/2026 (+https://www.t0ul.com
 var Client = &http.Client{Timeout: 15 * time.Second}
 
 // Fetch GETs url and returns the body, up to limit bytes, plus the content type.
-func Fetch(ctx context.Context, url string, limit int64) (body []byte, contentType string, err error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+func Fetch(ctx context.Context, pageURL string, limit int64) (body []byte, contentType string, err error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, pageURL, nil)
 	if err != nil {
 		return nil, "", err
 	}
 	req.Header.Set("User-Agent", userAgent)
 	resp, err := Client.Do(req)
 	if err != nil {
-		return nil, "", fmt.Errorf("get %s: %w", url, err)
+		return nil, "", fmt.Errorf("get %s: %w", pageURL, err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil, "", fmt.Errorf("get %s: %s", url, resp.Status)
+		return nil, "", fmt.Errorf("get %s: %s", pageURL, resp.Status)
 	}
 	body, err = io.ReadAll(io.LimitReader(resp.Body, limit))
 	if err != nil {
-		return nil, "", fmt.Errorf("read %s: %w", url, err)
+		return nil, "", fmt.Errorf("read %s: %w", pageURL, err)
 	}
 	return body, resp.Header.Get("Content-Type"), nil
 }

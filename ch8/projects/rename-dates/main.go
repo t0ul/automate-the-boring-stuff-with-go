@@ -60,15 +60,15 @@ func Plan(folder string) (map[string]string, error) {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("rename-dates", flag.ContinueOnError)
-	apply := fs.Bool("apply", false, "actually rename (default: print the plan)")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("rename-dates", flag.ContinueOnError)
+	apply := flags.Bool("apply", false, "actually rename (default: print the plan)")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
-	if fs.NArg() != 1 {
+	if flags.NArg() != 1 {
 		return errors.New("usage: rename-dates [-apply] <folder>")
 	}
-	folder := fs.Arg(0)
+	folder := flags.Arg(0)
 	plan, err := Plan(folder)
 	if err != nil {
 		return err

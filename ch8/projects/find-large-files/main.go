@@ -60,7 +60,7 @@ func HumanSize(n int64) string {
 
 // FindLarge returns the files under root whose size is at least min, largest first.
 // Folders it cannot read are skipped, not fatal.
-func FindLarge(root string, min int64) ([]Entry, error) {
+func FindLarge(root string, minSize int64) ([]Entry, error) {
 	var found []Entry
 	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -76,7 +76,7 @@ func FindLarge(root string, min int64) ([]Entry, error) {
 		if err != nil {
 			return nil
 		}
-		if info.Size() >= min {
+		if info.Size() >= minSize {
 			found = append(found, Entry{Path: path, Size: info.Size()})
 		}
 		return nil
@@ -89,26 +89,26 @@ func FindLarge(root string, min int64) ([]Entry, error) {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("find-large-files", flag.ContinueOnError)
-	minFlag := fs.String("min", "100MB", "smallest size to report")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("find-large-files", flag.ContinueOnError)
+	minFlag := flags.String("min", "100MB", "smallest size to report")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
-	if fs.NArg() != 1 {
+	if flags.NArg() != 1 {
 		return errors.New("usage: find-large-files [-min 100MB] <folder>")
 	}
-	min, err := ParseSize(*minFlag)
+	minSize, err := ParseSize(*minFlag)
 	if err != nil {
 		return err
 	}
-	entries, err := FindLarge(fs.Arg(0), min)
+	entries, err := FindLarge(flags.Arg(0), minSize)
 	if err != nil {
 		return err
 	}
 	for _, e := range entries {
 		fmt.Printf("%10s  %s\n", HumanSize(e.Size), e.Path)
 	}
-	fmt.Fprintf(os.Stderr, "%d file(s) at or above %s\n", len(entries), HumanSize(min))
+	fmt.Fprintf(os.Stderr, "%d file(s) at or above %s\n", len(entries), HumanSize(minSize))
 	return nil
 }
 

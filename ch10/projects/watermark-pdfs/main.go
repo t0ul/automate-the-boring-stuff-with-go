@@ -37,15 +37,15 @@ func OutputName(in string) string {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("watermark-pdfs", flag.ContinueOnError)
-	text := fs.String("text", "DRAFT", "the word to stamp")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("watermark-pdfs", flag.ContinueOnError)
+	text := flags.String("text", "DRAFT", "the word to stamp")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
-	if fs.NArg() == 0 {
+	if flags.NArg() == 0 {
 		return errors.New("usage: watermark-pdfs [-text DRAFT] <file.pdf ...>")
 	}
-	for _, in := range fs.Args() {
+	for _, in := range flags.Args() {
 		out := OutputName(in)
 		if err := Stamp(context.Background(), in, out, *text); err != nil {
 			return err

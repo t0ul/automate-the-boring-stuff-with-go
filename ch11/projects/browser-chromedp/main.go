@@ -17,14 +17,14 @@ import (
 
 // Visit loads url, returns the page title and the text of the first h1, and writes a
 // screenshot to shot. Pass an empty shot to skip the screenshot.
-func Visit(ctx context.Context, url, shot string) (title, heading string, err error) {
+func Visit(ctx context.Context, pageURL, shot string) (title, heading string, err error) {
 	allocCtx, cancel := chromedp.NewExecAllocator(ctx, chromedp.DefaultExecAllocatorOptions[:]...)
 	defer cancel()
 	tab, cancel := chromedp.NewContext(allocCtx)
 	defer cancel()
 
-	if err := chromedp.Do(tab, chromedp.Navigate(url), chromedp.WaitVisible("h1")); err != nil {
-		return "", "", fmt.Errorf("load %s: %w", url, err)
+	if err := chromedp.Do(tab, chromedp.Navigate(pageURL), chromedp.WaitVisible("h1")); err != nil {
+		return "", "", fmt.Errorf("load %s: %w", pageURL, err)
 	}
 	if title, err = chromedp.Run(tab, chromedp.Title()); err != nil {
 		return "", "", err

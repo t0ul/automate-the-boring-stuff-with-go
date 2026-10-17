@@ -9,19 +9,18 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"path"
 	"time"
-
-	"io"
 )
 
 var client = &http.Client{Timeout: 2 * time.Minute}
 
 // Download streams url into path and returns the number of bytes written.
-func Download(ctx context.Context, rawURL, path string) (int64, error) {
+func Download(ctx context.Context, rawURL, dest string) (int64, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 	if err != nil {
 		return 0, err
@@ -35,16 +34,16 @@ func Download(ctx context.Context, rawURL, path string) (int64, error) {
 	if resp.StatusCode != http.StatusOK {
 		return 0, fmt.Errorf("get %s: %s", rawURL, resp.Status)
 	}
-	f, err := os.Create(path)
+	f, err := os.Create(dest)
 	if err != nil {
-		return 0, fmt.Errorf("create %s: %w", path, err)
+		return 0, fmt.Errorf("create %s: %w", dest, err)
 	}
 	n, copyErr := io.Copy(f, resp.Body)
 	if err := f.Close(); copyErr == nil && err != nil {
 		copyErr = err
 	}
 	if copyErr != nil {
-		return n, fmt.Errorf("save %s: %w", path, copyErr)
+		return n, fmt.Errorf("save %s: %w", dest, copyErr)
 	}
 	return n, nil
 }
@@ -63,15 +62,15 @@ func DefaultName(rawURL string) string {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("save-page", flag.ContinueOnError)
-	out := fs.String("out", "", "file to write (default: last part of the URL)")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("save-page", flag.ContinueOnError)
+	out := flags.String("out", "", "file to write (default: last part of the URL)")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
-	if fs.NArg() != 1 {
+	if flags.NArg() != 1 {
 		return errors.New("usage: save-page [-out file] <url>")
 	}
-	rawURL := fs.Arg(0)
+	rawURL := flags.Arg(0)
 	if *out == "" {
 		*out = DefaultName(rawURL)
 	}

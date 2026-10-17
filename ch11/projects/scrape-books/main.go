@@ -52,39 +52,39 @@ func Parse(r io.Reader) ([]Book, error) {
 }
 
 // Scrape fetches url and parses it.
-func Scrape(ctx context.Context, url string) ([]Book, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+func Scrape(ctx context.Context, pageURL string) ([]Book, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, pageURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "automate-the-boring-stuff-with-go/2026 (+https://www.t0ul.com)")
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("get %s: %w", url, err)
+		return nil, fmt.Errorf("get %s: %w", pageURL, err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("get %s: %s", url, resp.Status)
+		return nil, fmt.Errorf("get %s: %s", pageURL, resp.Status)
 	}
 	return Parse(resp.Body)
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("scrape-books", flag.ContinueOnError)
-	url := fs.String("url", "https://books.toscrape.com/", "catalogue page to read")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("scrape-books", flag.ContinueOnError)
+	pageURL := flags.String("url", "https://books.toscrape.com/", "catalogue page to read")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	books, err := Scrape(ctx, *url)
+	books, err := Scrape(ctx, *pageURL)
 	if err != nil {
 		return err
 	}
 	for _, b := range books {
 		fmt.Printf("%-8s %-6s %s\n", b.Price, b.Rating, b.Title)
 	}
-	fmt.Fprintf(os.Stderr, "%d book(s) on %s\n", len(books), *url)
+	fmt.Fprintf(os.Stderr, "%d book(s) on %s\n", len(books), *pageURL)
 	return nil
 }
 

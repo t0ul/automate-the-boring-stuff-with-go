@@ -49,9 +49,9 @@ func Fill(f *excelize.File, sheet string, n int) error {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("multiplication-table", flag.ContinueOnError)
-	n := fs.Int("n", 10, "table size")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("multiplication-table", flag.ContinueOnError)
+	n := flags.Int("n", 10, "table size")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
 	if *n < 1 || *n > 1000 {

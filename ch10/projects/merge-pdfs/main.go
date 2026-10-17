@@ -60,15 +60,15 @@ func Merge(ctx context.Context, in []string, out string) (int, error) {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("merge-pdfs", flag.ContinueOnError)
-	out := fs.String("out", "merged.pdf", "output file")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("merge-pdfs", flag.ContinueOnError)
+	out := flags.String("out", "merged.pdf", "output file")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
-	if fs.NArg() == 0 {
+	if flags.NArg() == 0 {
 		return errors.New("usage: merge-pdfs [-out merged.pdf] <folder or file.pdf ...>")
 	}
-	in, err := Inputs(fs.Args(), *out)
+	in, err := Inputs(flags.Args(), *out)
 	if err != nil {
 		return err
 	}

@@ -102,11 +102,11 @@ func Render(n int, quiz []Question) (paper, key string) {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("quiz-builder", flag.ContinueOnError)
-	count := fs.Int("n", 3, "how many quiz forms to write")
-	outDir := fs.String("out", "out", "directory for the quiz files")
-	seed := fs.Uint64("seed", 0, "random seed (0 = different every run)")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("quiz-builder", flag.ContinueOnError)
+	count := flags.Int("n", 3, "how many quiz forms to write")
+	outDir := flags.String("out", "out", "directory for the quiz files")
+	seed := flags.Uint64("seed", 0, "random seed (0 = different every run)")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
 	if err := os.MkdirAll(*outDir, 0o755); err != nil {

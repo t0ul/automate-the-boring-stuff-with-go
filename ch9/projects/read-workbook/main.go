@@ -35,15 +35,15 @@ func Table(f *excelize.File, sheet string) ([][]string, error) {
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("read-workbook", flag.ContinueOnError)
-	cell := fs.String("cell", "B2", "one cell to print by name")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("read-workbook", flag.ContinueOnError)
+	cell := flags.String("cell", "B2", "one cell to print by name")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
-	if fs.NArg() != 1 {
+	if flags.NArg() != 1 {
 		return errors.New("usage: read-workbook [-cell B2] <file.xlsx>")
 	}
-	f, err := excelize.OpenFile(fs.Arg(0))
+	f, err := excelize.OpenFile(flags.Arg(0))
 	if err != nil {
 		return fmt.Errorf("open: %w", err)
 	}

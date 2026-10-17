@@ -46,23 +46,23 @@ func (f Fetcher) Get(ctx context.Context, n int) (Comic, error) {
 	return f.getJSON(ctx, fmt.Sprintf("%s/%d/info.0.json", f.Base, n))
 }
 
-func (f Fetcher) getJSON(ctx context.Context, url string) (Comic, error) {
+func (f Fetcher) getJSON(ctx context.Context, apiURL string) (Comic, error) {
 	var c Comic
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, nil)
 	if err != nil {
 		return c, err
 	}
 	req.Header.Set("User-Agent", "automate-the-boring-stuff-with-go/2026")
 	resp, err := client.Do(req)
 	if err != nil {
-		return c, fmt.Errorf("get %s: %w", url, err)
+		return c, fmt.Errorf("get %s: %w", apiURL, err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return c, fmt.Errorf("get %s: %s", url, resp.Status)
+		return c, fmt.Errorf("get %s: %s", apiURL, resp.Status)
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&c); err != nil {
-		return c, fmt.Errorf("decode %s: %w", url, err)
+		return c, fmt.Errorf("decode %s: %w", apiURL, err)
 	}
 	return c, nil
 }
@@ -134,10 +134,10 @@ func (f Fetcher) DownloadRecent(ctx context.Context, n int, dir string) (int, er
 }
 
 func run(args []string) error {
-	fs := flag.NewFlagSet("download-xkcd", flag.ContinueOnError)
-	n := fs.Int("n", 5, "how many recent comics")
-	dir := fs.String("dir", "xkcd", "folder to save into")
-	if err := fs.Parse(args); err != nil {
+	flags := flag.NewFlagSet("download-xkcd", flag.ContinueOnError)
+	n := flags.Int("n", 5, "how many recent comics")
+	dir := flags.String("dir", "xkcd", "folder to save into")
+	if err := flags.Parse(args); err != nil {
 		return err
 	}
 	if *n < 1 {
