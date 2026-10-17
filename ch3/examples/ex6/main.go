@@ -9,11 +9,11 @@ func main() {
 	fmt.Scan(&n)
 	switch {
 	case n == "Toul":
-		fmt.Printf("The author is %s ", n)
+		fmt.Printf("The author is %s\n", n)
 	default:
-		// a thousand thanks if you're not the author
-		for i := 0; i < 1000; i++ {
-			fmt.Printf("\ni: %d Thank you %s for reading", i, n)
+		// range over an integer counts 0, 1, 2 ... 999
+		for i := range 1000 {
+			fmt.Printf("i: %d Thank you %s for reading\n", i, n)
 		}
 	}
 }
