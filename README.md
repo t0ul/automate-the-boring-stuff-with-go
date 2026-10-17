@@ -59,4 +59,4 @@ Every project is `go run ./<dir>`; inputs sit next to the code and outputs are w
 
 ## License
 
-GPL-3.0, see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). Copy any of it into your own programs.
