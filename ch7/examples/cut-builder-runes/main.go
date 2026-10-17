@@ -22,7 +22,7 @@ func main() {
 	// a string is bytes; a rune is one character. They differ as soon as you leave ASCII.
 	s := "héllo"
 	fmt.Println(len(s), utf8.RuneCountInString(s)) // 6 bytes, 5 characters
-	for i, r := range s {                           // range walks runes, not bytes
+	for i, r := range s {                          // range walks runes, not bytes
 		fmt.Printf("%d:%c ", i, r)
 	}
 	fmt.Println()
