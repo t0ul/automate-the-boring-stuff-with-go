@@ -15,3 +15,11 @@ update*.xlsx
 save.txt
 *.zip
 xkcd/
+inventory.xlsx
+updatedProduceSales.xlsx
+multiplication_table_*.xlsx
+combined.xlsx
+column_*.txt
+census_summary.json
+*_stamped.pdf
+screenshot.png

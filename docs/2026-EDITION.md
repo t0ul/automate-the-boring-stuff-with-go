@@ -59,9 +59,9 @@ Code (this repository)
 
 - [x] A. Root module, CI (build, vet, test, gofmt, govulncheck), vet fixes, chapter copies
   and outputs removed, this file.
-- [ ] B. Clean-room rewrite of the derived projects on excelize, pdfcpu, ledongthuc/pdf,
-  goquery and chromedp; own fixtures from `tools/genfixtures`; tests where there is pure
-  logic; `tools/provenance-check`; notice removed.
+- [x] B. Clean-room rewrite of the derived projects on excelize, pdfcpu, ledongthuc/pdf,
+  goquery and chromedp; own fixtures from `tools/genfixtures`; tests beside every project;
+  `tools/provenance` in CI; notice removed.
 
 Text (t0ul.com)
 

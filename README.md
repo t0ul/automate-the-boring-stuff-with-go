@@ -34,6 +34,19 @@ There is one Go module at the root, so `go build ./...` builds everything and `g
 
 The book is being updated for Go 1.27. The review and the checklist are in [docs/2026-EDITION.md](docs/2026-EDITION.md).
 
-## Credits
+## Projects by chapter
 
-Some of the chapter 9–11 projects are adapted from [automateGo](https://github.com/dreddsa5dies/automateGo) by Viktor Solovev (MIT License); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Everything else is licensed under the GPL-3.0 in [LICENSE](LICENSE).
+| Chapter | Projects |
+|---|---|
+| 3 Control flow | `ch3/projects/GuessTheNumber`, `ch3/projects/RockPaperScissors` |
+| 7 Strings | `ch7/projects/PlainSearch`, `Replacement`, `email-finder`, `password-checker`, `quiz-builder` |
+| 8 Files | `ch8/projects/backup-to-zip`, `find-large-files`, `rename-dates` |
+| 9 Excel | `ch9/projects/read-workbook`, `census-by-county`, `write-workbook`, `update-produce-prices`, `multiplication-table`, `txt-to-xlsx`, `xlsx-to-txt` (excelize) |
+| 10 PDFs | `ch10/projects/read-pdf-text`, `merge-pdfs`, `watermark-pdfs` (pdfcpu, ledongthuc/pdf) |
+| 11 Web | `ch11/projects/fetch-page`, `search-term`, `save-page`, `download-xkcd`, `scrape-books` (goquery), `browser-chromedp` (headless Chrome) |
+
+Every project is `go run ./<dir>`; inputs sit next to the code and outputs are written next to the code and ignored by git. `go run ./tools/genfixtures` regenerates the workbook and PDF inputs; `go run ./tools/provenance` checks that no file is copied from anywhere else.
+
+## License
+
+GPL-3.0, see [LICENSE](LICENSE).
