@@ -66,11 +66,14 @@ Code (this repository)
 Text (t0ul.com)
 
 - [x] C (code). Chapter 1 to 8 examples refreshed so the text can quote running files.
-- [ ] C (text). Chapters 1 to 11 updated for Go 1.27 and the new code (drafted on the
-  site branch `atbs-2026-edition`, awaiting review).
+- [x] C (text). Chapters 1 to 11 updated for Go 1.27 and the new code; live 2026-10-17.
 - [x] D (code). ch12 CSV and JSON, ch13 time, scheduling and running programs, ch14
   concurrency, ch15 testing and debugging, ch16 command-line tools, each with tests.
-- [ ] D (text). The five new chapters (drafted on the same site branch).
+- [x] D (text). Chapters 12 to 16 live on t0ul.com since 2026-10-17.
+- [x] Tier 3 (code). ch17 email and notifications, ch18 images, ch19 SQLite, ch20 a local
+  model (OpenAI-compatible local server, output validated by the program, never trusted).
+- [ ] Tier 3 (text). Chapters 17 to 20, drafted on the site branch `atbs-tier-3`.
+- [x] License switched to MIT (2026-10-17).
 - [ ] E. Introduction updated with what changed; cover and listing say 2026 edition.
 
 ## Conventions for 2026 code

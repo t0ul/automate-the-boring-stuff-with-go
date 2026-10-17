@@ -1,14 +1,21 @@
 // genfixtures writes every input file the chapter 9 and 10 projects read. The data is
 // invented and deterministic, so anyone can regenerate it and diff the result.
 //
-//	go run ./tools/genfixtures
+//	go run ./tools/genfixtures          # everything
+//	go run ./tools/genfixtures ch18     # only the steps whose name starts with ch18
 package main
 
 import (
 	"fmt"
+	"image"
+	"image/color"
+	"image/jpeg"
+	"image/png"
+	"math"
 	"math/rand/v2"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/xuri/excelize/v2"
 )
@@ -31,8 +38,18 @@ func run() error {
 		{"ch9/projects/txt-to-xlsx/*.txt", textFiles},
 		{"ch9/projects/xlsx-to-txt/table.xlsx", tableWorkbook},
 		{"ch10/projects/*/*.pdf", pdfs},
+		{"ch17/projects/dues-reminders/members.xlsx", membersWorkbook},
+		{"ch18/projects/thumbnails/sample/*", sampleImages},
+		{"ch18/projects/watermark-images/sample/*", watermarkImages},
+	}
+	only := ""
+	if len(os.Args) > 1 {
+		only = os.Args[1]
 	}
 	for _, s := range steps {
+		if !strings.HasPrefix(s.name, only) {
+			continue
+		}
 		if err := s.fn(); err != nil {
 			return fmt.Errorf("%s: %w", s.name, err)
 		}
@@ -186,4 +203,117 @@ func pdfs() error {
 		}
 	}
 	return nil
+}
+
+// savePNG and saveJPEG write an image, creating the folder if needed.
+func savePNG(path string, img image.Image) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	if err := png.Encode(f, img); err != nil {
+		f.Close()
+		return err
+	}
+	return f.Close()
+}
+
+func saveJPEG(path string, img image.Image) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	if err := jpeg.Encode(f, img, &jpeg.Options{Quality: 85}); err != nil {
+		f.Close()
+		return err
+	}
+	return f.Close()
+}
+
+// gradient paints a horizontal blue-to-orange gradient with a soft circle in it.
+func gradient(w, h int) *image.RGBA {
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			t := float64(x) / float64(w)
+			r := uint8(30 + 200*t)
+			g := uint8(90 + 60*t)
+			b := uint8(200 - 150*t)
+			d := math.Hypot(float64(x-w/2), float64(y-h/2))
+			if d < float64(h)/4 {
+				r, g, b = 250, 240, 200
+			}
+			img.Set(x, y, color.RGBA{r, g, b, 255})
+		}
+	}
+	return img
+}
+
+// stripes paints diagonal stripes, a shape that shows resampling quality.
+func stripes(w, h int) *image.RGBA {
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			if (x+y)/24%2 == 0 {
+				img.Set(x, y, color.RGBA{40, 120, 80, 255})
+			} else {
+				img.Set(x, y, color.RGBA{230, 230, 220, 255})
+			}
+		}
+	}
+	return img
+}
+
+func sampleImages() error {
+	if err := savePNG("ch18/projects/thumbnails/sample/sunset.png", gradient(800, 600)); err != nil {
+		return err
+	}
+	if err := saveJPEG("ch18/projects/thumbnails/sample/stripes.jpg", stripes(640, 480)); err != nil {
+		return err
+	}
+	return savePNG("ch18/projects/thumbnails/sample/tall.png", gradient(300, 900))
+}
+
+func watermarkImages() error {
+	if err := savePNG("ch18/projects/watermark-images/sample/photo.png", gradient(640, 480)); err != nil {
+		return err
+	}
+	// a small round logo with a transparent background
+	logo := image.NewRGBA(image.Rect(0, 0, 96, 96))
+	for y := 0; y < 96; y++ {
+		for x := 0; x < 96; x++ {
+			d := math.Hypot(float64(x-48), float64(y-48))
+			switch {
+			case d < 40:
+				logo.Set(x, y, color.RGBA{20, 20, 20, 230})
+			case d < 46:
+				logo.Set(x, y, color.RGBA{255, 255, 255, 230})
+			}
+		}
+	}
+	return savePNG("ch18/projects/watermark-images/sample/logo.png", logo)
+}
+
+func membersWorkbook() error {
+	f := excelize.NewFile()
+	rows := [][]any{
+		{"Name", "Email", "Jan", "Feb", "Mar"},
+		{"Ada Lovelace", "ada@example.com", "paid", "paid", "paid"},
+		{"Grace Hopper", "grace@example.com", "paid", "paid", ""},
+		{"Linus Torvalds", "linus@example.com", "paid", "", ""},
+		{"Ken Thompson", "ken@example.com", "paid", "paid", "paid"},
+		{"Rob Pike", "rob@example.com", "", "paid", ""},
+	}
+	for i, row := range rows {
+		if err := f.SetSheetRow("Sheet1", fmt.Sprintf("A%d", i+1), &row); err != nil {
+			return err
+		}
+	}
+	return save(f, "ch17/projects/dues-reminders/members.xlsx")
 }
