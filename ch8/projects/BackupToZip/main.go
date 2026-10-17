@@ -17,7 +17,7 @@ func main() {
 	if len(os.Args) > 1 {
 		fP, err := filepath.Abs(os.Args[1])
 		if err != nil {
-			fmt.Errorf("ERR %s", err)
+			fmt.Println("ERR", err)
 		}
 
 		var zipFileName string

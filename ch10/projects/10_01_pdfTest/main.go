@@ -40,7 +40,7 @@ func readPdf(path string) (string, error) {
 		}
 		s, err := p.GetPlainText(nil)
 		if err != nil {
-			fmt.Printf("Error: ", err)
+			fmt.Println("Error:", err)
 		}
 
 		textBuilder.WriteString(s)
