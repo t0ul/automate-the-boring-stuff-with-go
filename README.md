@@ -33,6 +33,10 @@ There is one Go module at the root, so `go build ./...` builds everything and `g
 - [Concurrency](https://www.t0ul.com/blog/automate-go-ch14-concurrency/)
 - [Testing and Debugging](https://www.t0ul.com/blog/automate-go-ch15-testing-and-debugging/)
 - [Command-Line Tools and Shipping Binaries](https://www.t0ul.com/blog/automate-go-ch16-command-line-tools/)
+- [Email and Notifications](https://www.t0ul.com/blog/automate-go-ch17-email-and-notifications/)
+- [Images](https://www.t0ul.com/blog/automate-go-ch18-images/)
+- [SQLite](https://www.t0ul.com/blog/automate-go-ch19-sqlite/)
+- [Automate with a Local Model](https://www.t0ul.com/blog/automate-go-ch20-local-model/)
 - [Fin](https://www.t0ul.com/blog/introducing-automate-the-boring-stuff-with-go/)
 
 ## 2026 edition
@@ -54,6 +58,10 @@ The book is being updated for Go 1.27. The review and the checklist are in [docs
 | 14 Concurrency | `ch14/projects/parallel-xkcd`, `find-duplicates` |
 | 15 Testing and debugging | `ch15/projects/retry` (plus table, fuzz and benchmark examples) |
 | 16 Command-line tools | `ch16/projects/todo` (subcommands, embed, version via ldflags, `build.sh`) |
+| 17 Email and notifications | `ch17/projects/send-report`, `notify`, `dues-reminders` |
+| 18 Images | `ch18/projects/thumbnails`, `watermark-images` (x/image) |
+| 19 SQLite | `ch19/projects/expenses-db`, `file-index` (modernc.org/sqlite) |
+| 20 A local model | `ch20/projects/categorize-expenses`, `name-notes` (any OpenAI-compatible local server, Ollama by default) |
 
 Every project is `go run ./<dir>`; inputs sit next to the code and outputs are written next to the code and ignored by git. `go run ./tools/genfixtures` regenerates the workbook and PDF inputs; `go run ./tools/provenance` checks that no file is copied from anywhere else.
 
