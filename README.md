@@ -28,6 +28,11 @@ There is one Go module at the root, so `go build ./...` builds everything and `g
 - [Excel Files](https://www.t0ul.com/blog/automate-go-ch9-excel-files/)
 - [PDFs](https://www.t0ul.com/blog/automate-go-ch10-pdfs/)
 - [Web Requests](https://www.t0ul.com/blog/automate-go-ch11-web-requests/)
+- [CSV and JSON](https://www.t0ul.com/blog/automate-go-ch12-csv-and-json/)
+- [Time, Scheduling and Running Programs](https://www.t0ul.com/blog/automate-go-ch13-time-and-scheduling/)
+- [Concurrency](https://www.t0ul.com/blog/automate-go-ch14-concurrency/)
+- [Testing and Debugging](https://www.t0ul.com/blog/automate-go-ch15-testing-and-debugging/)
+- [Command-Line Tools and Shipping Binaries](https://www.t0ul.com/blog/automate-go-ch16-command-line-tools/)
 - [Fin](https://www.t0ul.com/blog/introducing-automate-the-boring-stuff-with-go/)
 
 ## 2026 edition
@@ -44,6 +49,11 @@ The book is being updated for Go 1.27. The review and the checklist are in [docs
 | 9 Excel | `ch9/projects/read-workbook`, `census-by-county`, `write-workbook`, `update-produce-prices`, `multiplication-table`, `txt-to-xlsx`, `xlsx-to-txt` (excelize) |
 | 10 PDFs | `ch10/projects/read-pdf-text`, `merge-pdfs`, `watermark-pdfs` (pdfcpu, ledongthuc/pdf) |
 | 11 Web | `ch11/projects/fetch-page`, `search-term`, `save-page`, `download-xkcd`, `scrape-books` (goquery), `browser-chromedp` (headless Chrome) |
+| 12 CSV and JSON | `ch12/projects/csv-remove-header`, `csv-to-json`, `json-get` |
+| 13 Time and scheduling | `ch13/projects/stopwatch`, `countdown`, `every` |
+| 14 Concurrency | `ch14/projects/parallel-xkcd`, `find-duplicates` |
+| 15 Testing and debugging | `ch15/projects/retry` (plus table, fuzz and benchmark examples) |
+| 16 Command-line tools | `ch16/projects/todo` (subcommands, embed, version via ldflags, `build.sh`) |
 
 Every project is `go run ./<dir>`; inputs sit next to the code and outputs are written next to the code and ignored by git. `go run ./tools/genfixtures` regenerates the workbook and PDF inputs; `go run ./tools/provenance` checks that no file is copied from anywhere else.
 
