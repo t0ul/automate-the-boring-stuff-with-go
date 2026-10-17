@@ -25,6 +25,8 @@ jobs:
         run: go test ./...
       - name: Formatting
         run: test -z "$(gofmt -l .)"
+      - name: Provenance (nothing copied from automateGo)
+        run: go run ./tools/provenance
       - name: Known vulnerabilities in the toolchain and dependencies
         uses: golang/govulncheck-action@v1
         with:
