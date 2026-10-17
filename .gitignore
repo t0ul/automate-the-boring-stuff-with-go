@@ -4,3 +4,14 @@
 *.log
 log.txt
 log/
+
+# Program outputs (every project writes next to itself; inputs are committed, outputs are not)
+save.pdf
+saved.pdf
+merged.pdf
+saveTable.xlsx
+saveFile*.txt
+update*.xlsx
+save.txt
+*.zip
+xkcd/

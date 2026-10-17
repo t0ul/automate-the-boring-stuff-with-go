@@ -58,7 +58,7 @@ func main() {
 				pdf.SetFont("Arial", "B", 16)
 				txt, err := p.GetPlainText(nil)
 				if err != nil {
-					fmt.Printf("error: ", err)
+					fmt.Println("error:", err)
 				}
 				pdf.Cell(40, 10, txt)
 			}
