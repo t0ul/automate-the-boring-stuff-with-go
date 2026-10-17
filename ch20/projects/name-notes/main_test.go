@@ -16,6 +16,9 @@ func TestAccept(t *testing.T) {
 	good := map[string]string{
 		`{"name": "budget-meeting-minutes"}`:             "budget-meeting-minutes",
 		"```json\n{\"name\":\"Lemon-Cake-Recipe\"}\n```": "lemon-cake-recipe",
+		`{"name": "budget_meeting_minutes"}`:             "budget-meeting-minutes",
+		`{"name": "Grandma's lemon cake"}`:               "grandmas-lemon-cake",
+		`{"name": "  packing list:  Lisbon  "}`:          "packing-list-lisbon",
 	}
 	for reply, want := range good {
 		if got, err := Accept(reply); err != nil || got != want {
@@ -25,9 +28,8 @@ func TestAccept(t *testing.T) {
 	bad := []string{
 		`{"name": "minutes"}`,                 // one word
 		`{"name": "a-b-c-d-e-f-g"}`,           // too many words
-		`{"name": "budget meeting"}`,          // a space
-		`{"name": "notes.backup"}`,            // a dot
-		`{"name": "../elsewhere"}`,            // path characters
+		`{"name": "notes.backup"}`,            // tidies to one word
+		`{"name": "../elsewhere"}`,            // tidies to one word; the slashes never survive
 		`{"name": ""}`,                        // empty
 		`the note is about a budget meeting`,  // no JSON
 		`{"title": "budget-meeting-minutes"}`, // wrong key
