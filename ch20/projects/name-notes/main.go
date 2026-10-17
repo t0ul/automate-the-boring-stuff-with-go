@@ -41,7 +41,9 @@ func Suggest(ctx context.Context, c Client, contents string) (string, error) {
 	return Accept(reply)
 }
 
-// Accept extracts the name from the reply and checks it against the pattern.
+// Accept extracts the name from the reply, tidies it the way a person would (lower
+// case, hyphens for spaces and underscores, punctuation dropped) and then checks it
+// against the pattern. The tidying is deterministic code; the pattern is still the gate.
 func Accept(reply string) (string, error) {
 	obj, ok := ExtractJSON(reply)
 	if !ok {
@@ -53,11 +55,31 @@ func Accept(reply string) (string, error) {
 	if err := json.Unmarshal([]byte(obj), &v); err != nil {
 		return "", fmt.Errorf("bad JSON %q", obj)
 	}
-	name := strings.ToLower(strings.TrimSpace(v.Name))
+	name := Tidy(v.Name)
 	if !validName.MatchString(name) {
-		return "", fmt.Errorf("suggested name %q does not match %s", name, validName)
+		return "", fmt.Errorf("suggested name %q does not match %s", v.Name, validName)
 	}
 	return name, nil
+}
+
+// Tidy lower-cases, turns runs of spaces, underscores and hyphens into one hyphen, and
+// drops every other character that is not a letter or digit.
+func Tidy(s string) string {
+	var b strings.Builder
+	lastHyphen := true
+	for _, r := range strings.ToLower(strings.TrimSpace(s)) {
+		switch {
+		case r >= 'a' && r <= 'z', r >= '0' && r <= '9':
+			b.WriteRune(r)
+			lastHyphen = false
+		case r == ' ' || r == '_' || r == '-':
+			if !lastHyphen {
+				b.WriteByte('-')
+				lastHyphen = true
+			}
+		}
+	}
+	return strings.TrimSuffix(b.String(), "-")
 }
 
 // Rename is one planned change.
