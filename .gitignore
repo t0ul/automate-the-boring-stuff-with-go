@@ -23,3 +23,6 @@ column_*.txt
 census_summary.json
 *_stamped.pdf
 screenshot.png
+headerRemoved/
+expenses.json
+dist/

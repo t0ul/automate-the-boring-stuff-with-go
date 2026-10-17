@@ -37,14 +37,19 @@ type file struct {
 	lines []string // meaningful lines (Go files only)
 }
 
-var boilerplate = regexp.MustCompile(`^(package \w+|import \(?|\)|\}|\{|\} else \{|return( err| nil| err, nil|( nil,)+ err)?|if err != nil \{|defer \w+\.Close\(\)|func main\(\) \{|os\.Exit\(1\)|log\.Fatal(ln|f)?\(err\)|"[\w./-]+"|\w+ "[\w./-]+"|fmt\.Fprintln\(os\.Stderr, "error:", err\)|if err := run\(os\.Args\[1:\]\); err != nil \{|if err := run\(\); err != nil \{)$`)
+// boilerplate is syntax every Go program shares; it carries no authorship signal. Lines
+// shorter than minMeaningful characters (`}()`, `wg.Wait()`, `close(ch)`) are dropped for
+// the same reason.
+var boilerplate = regexp.MustCompile(`^(package \w+|import \(?|\)|\}|\{|\} else \{|\}\(\)|return( err| nil| err, nil|( nil,)+ err)?|if err != nil \{|defer \w+\.Close\(\)|defer wg\.Done\(\)|var wg sync\.WaitGroup|go func\(\) \{|func main\(\) \{|os\.Exit\(1\)|log\.Fatal(ln|f)?\(err\)|"[\w./-]+"|\w+ "[\w./-]+"|fmt\.Fprintln\(os\.Stderr, "error:", err\)|if err := run\(os\.Args\[1:\]\); err != nil \{|if err := run\(\); err != nil \{)$`)
+
+const minMeaningful = 12
 
 func meaningful(src []byte) []string {
 	var out []string
 	sc := bufio.NewScanner(strings.NewReader(string(src)))
 	for sc.Scan() {
 		l := strings.TrimSpace(sc.Text())
-		if l == "" || strings.HasPrefix(l, "//") || boilerplate.MatchString(l) {
+		if l == "" || len(l) < minMeaningful || strings.HasPrefix(l, "//") || boilerplate.MatchString(l) {
 			continue
 		}
 		out = append(out, l)

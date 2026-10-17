@@ -1,0 +1,10 @@
+todo: a to-do list that lives in one JSON file.
+
+Usage:
+  todo add <text...>     add an item
+  todo list              show open items (-all shows done ones too)
+  todo done <number>     mark an item done
+  todo rm <number>       delete an item
+  todo version           print the version
+
+The file is $TODO_FILE if set, otherwise todo.json in your user config folder.

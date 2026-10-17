@@ -65,10 +65,12 @@ Code (this repository)
 
 Text (t0ul.com)
 
-- [ ] C. Chapters 1, 2, 4, 5, 6, 7, 8, 9, 10, 11 updated for Go 1.27 and the new code.
-- [ ] D. New chapters: 12 CSV and JSON, 13 time, scheduling and launching programs,
-  14 concurrency for automation, 15 testing and debugging, 16 command-line tools and
-  shipping binaries.
+- [x] C (code). Chapter 1 to 8 examples refreshed so the text can quote running files.
+- [ ] C (text). Chapters 1 to 11 updated for Go 1.27 and the new code (drafted on the
+  site branch `atbs-2026-edition`, awaiting review).
+- [x] D (code). ch12 CSV and JSON, ch13 time, scheduling and running programs, ch14
+  concurrency, ch15 testing and debugging, ch16 command-line tools, each with tests.
+- [ ] D (text). The five new chapters (drafted on the same site branch).
 - [ ] E. Introduction updated with what changed; cover and listing say 2026 edition.
 
 ## Conventions for 2026 code
