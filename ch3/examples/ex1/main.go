@@ -3,17 +3,18 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 )
 
 func main() {
-	// use the rand library to generate a random integer.
-	n := rand.Intn(100)
+	// pick a random whole number from 0 to 99
+	n := rand.IntN(100)
 	// 'if' condition
 	if n%2 == 0 {
-		// code block that's executed if the condition is true
-		fmt.Printf("Number is even: %d", n)
+		// code block that runs only when the condition is true
+		fmt.Printf("Number is even: %d\n", n)
+		return // leave main, so the line below does not run
 	}
-	// code block that's executed if it isn't true
-	fmt.Printf("Number is odd: %d", n)
+	// reached only when the condition was false
+	fmt.Printf("Number is odd: %d\n", n)
 }

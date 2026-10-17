@@ -3,12 +3,16 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 )
 
 func main() {
 	strVar := "100"
 	intVar, err := strconv.Atoi(strVar)
-	fmt.Println(intVar, err, reflect.TypeOf(intVar))
+	if err != nil {
+		fmt.Println("not a number:", err)
+		return
+	}
+	// %T prints the type of a value
+	fmt.Printf("%v is a %T\n", intVar, intVar)
 }
