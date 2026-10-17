@@ -15,10 +15,23 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
+// allocatorOptions is chromedp's headless default set, plus --no-sandbox when running
+// on a CI runner (GitHub sets CI=true). Chrome's sandbox needs unprivileged user
+// namespaces, which Ubuntu 24.04 runners restrict, so Chrome refuses to start without the
+// flag there. Keep the sandbox on your own machine: it is what stands between a hostile
+// page and the rest of your system.
+func allocatorOptions() []chromedp.ExecAllocatorOption {
+	opts := append([]chromedp.ExecAllocatorOption{}, chromedp.DefaultExecAllocatorOptions[:]...)
+	if os.Getenv("CI") != "" {
+		opts = append(opts, chromedp.NoSandbox)
+	}
+	return opts
+}
+
 // Visit loads url, returns the page title and the text of the first h1, and writes a
 // screenshot to shot. Pass an empty shot to skip the screenshot.
 func Visit(ctx context.Context, pageURL, shot string) (title, heading string, err error) {
-	allocCtx, cancel := chromedp.NewExecAllocator(ctx, chromedp.DefaultExecAllocatorOptions[:]...)
+	allocCtx, cancel := chromedp.NewExecAllocator(ctx, allocatorOptions()...)
 	defer cancel()
 	tab, cancel := chromedp.NewContext(allocCtx)
 	defer cancel()
