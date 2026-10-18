@@ -4,6 +4,8 @@ Source code for [Automate the Boring Stuff with Go](https://www.t0ul.com/blog/in
 
 ## Running the code
 
+Never used a terminal or git before? The book starts there: [Part 0, Before you code](https://www.t0ul.com/blog/automate-go-ch0-1-the-terminal/) covers the terminal, paths, git and GitHub in four short chapters, and chapter 0.4 ends with your first pull request to this very repository (see [CONTRIBUTORS.md](CONTRIBUTORS.md)).
+
 Install the current Go release from [go.dev/dl](https://go.dev/dl/), clone this repository, and run any example or project by its directory:
 
 ```bash
